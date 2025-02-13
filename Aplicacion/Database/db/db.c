@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include <sqlite3.h>
+#include "../sqlite3/sqlite3.h" // ojo aca
  
+// esta funcion recibe una fila con los nombres y valores de cada atributo y la imprime 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName){
     int i;
     for(i=0; i<argc; i++){
