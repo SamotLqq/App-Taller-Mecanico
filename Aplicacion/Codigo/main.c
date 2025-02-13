@@ -103,6 +103,8 @@ void handle_agregar_principal(GtkButton* button, gpointer data);
 void handle_agregar_trabajo_principal(GtkButton* button, gpointer data);
 // manejador del boton eliminar trabajo en principal.glade
 void handle_eliminar_trabajo(GtkButton* button, gpointer data);
+// manejador del boton eliminar de listado.glade
+void handle_eliminar_listado(GtkButton* button, gpointer data);
 // manejador de los botones del combobox
 void handle_combobox_detalle(GtkComboBox *combobox, gpointer data);
 // manejador del boton confriamr de trabajoEditar.glade
@@ -288,25 +290,25 @@ void renderizar_listado() {
     gtk_widget_show_all(GTK_WIDGET(window));
 
     // Conexion de botones
-    // Ver (obtenemos el auto que se encuentra en la fila del boton ver elegido y aplicamos handle_buscar)
-    
-    GObject *lVer1 = gtk_builder_get_object(builder, "l_ver_1");
-    g_signal_connect(lVer1, "clicked", G_CALLBACK(handle_ver_listado), NULL);
-    GObject *lVer2 = gtk_builder_get_object(builder, "l_ver_2");
-    g_signal_connect(lVer2, "clicked", G_CALLBACK(handle_ver_listado), NULL);
-    GObject *lVer3 = gtk_builder_get_object(builder, "l_ver_3");
-    g_signal_connect(lVer3, "clicked", G_CALLBACK(handle_ver_listado), NULL);
-    
+    for (int i = 0; i < 3; i++)
+    {
+        char temp[25];
+        
+        // Ver (obtenemos el auto que se encuentra en la fila del boton ver elegido y aplicamos handle_buscar)
+        snprintf(temp, 24, "l_ver_%d", i+1);
+        GObject *lVer = gtk_builder_get_object(builder, temp);
+        g_signal_connect(lVer, "clicked", G_CALLBACK(handle_ver_listado), NULL);
 
-    // Editar (obtenemos el auto que se encuentra en la fila del boton editar elegido y aplicamos handle_editar)
-    GObject *lEditar1 = gtk_builder_get_object(builder, "l_editar_1");
-    g_signal_connect(lEditar1, "clicked", G_CALLBACK(handle_editar_listado), NULL);
-    GObject *lEditar2 = gtk_builder_get_object(builder, "l_editar_2");
-    g_signal_connect(lEditar2, "clicked", G_CALLBACK(handle_editar_listado), NULL);
-    GObject *lEditar3 = gtk_builder_get_object(builder, "l_editar_3");
-    g_signal_connect(lEditar3, "clicked", G_CALLBACK(handle_editar_listado), NULL);
+        // Editar (obtenemos el auto que se encuentra en la fila del boton editar elegido y aplicamos handle_editar)
+        snprintf(temp, 24, "l_editar_%d", i+1);
+        GObject *lEditar = gtk_builder_get_object(builder, temp);
+        g_signal_connect(lEditar, "clicked", G_CALLBACK(handle_editar_listado), NULL);
 
-    // Eliminar
+        // Eliminar (elimjinamos el auto de la db y re renderizamos sin ese auto el listado)
+        snprintf(temp, 24, "l_eliminar_%d", i+1);
+        GObject *lEliminar = gtk_builder_get_object(builder, temp);
+        g_signal_connect(lEliminar, "clicked", G_CALLBACK(handle_eliminar_listado), NULL);
+    }
 
     // Volver
     GObject *l_volver = gtk_builder_get_object(builder, "l_volver");
@@ -599,6 +601,10 @@ void handle_eliminar_trabajo(GtkButton* button, gpointer data) {
     free(trabajoId);
 }
 
+void handle_eliminar_listado(GtkButton* button, gpointer data) {
+    printf("click en eliminar de listado.glade\n");
+}
+
 void handle_combobox_detalle(GtkComboBox *combobox, gpointer data) {
     GtkTreeIter iter;
     GtkTreeModel *model;
@@ -771,3 +777,4 @@ void imprimir_trabajos() {
         printf("descripcion: %s\n", trabajos[i]->descripcion);
     }
 }
+

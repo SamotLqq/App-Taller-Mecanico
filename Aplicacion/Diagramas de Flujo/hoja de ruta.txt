@@ -1,5 +1,0 @@
-conectar C con glade.
-
-conectar glade con base de datos
-
-
